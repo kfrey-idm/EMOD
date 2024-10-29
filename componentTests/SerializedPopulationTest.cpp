@@ -135,10 +135,14 @@ SUITE( SerializedPopulationTest )
             json::QuickInterpreter em_info = emod_info_json;
 
             std::stringstream emod_version;
-            emod_version << em_info["emod_major_version"].As<json::Uint64>()   << "."
-                         << em_info["emod_minor_version"].As<json::Uint64>()   << "."
-                         << em_info["emod_revision_number"].As<json::Uint64>() << "."
-                         << em_info["emod_build_number"].As<json::Uint64>();
+            emod_version << em_info[ "emod_major_version" ].As<json::Uint64>()
+                  << "." << em_info[ "emod_minor_version" ].As<json::Uint64>();
+                  // -----------------------------------------------------
+                  // --- DanB - 10/28/2024 - Part of removing revision and
+                  // --- build number because they are always 1 and 0.
+                  // -----------------------------------------------------
+                  //<< "." << em_info["emod_revision_number"].As<json::Uint64>()
+                  //<< "." << em_info["emod_build_number"].As<json::Uint64>();
 
             std::stringstream ser_pop_version;
             ser_pop_version << em_info["ser_pop_major_version"].As<json::Uint64>() << "."
