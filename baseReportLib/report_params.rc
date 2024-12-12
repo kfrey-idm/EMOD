@@ -29,6 +29,13 @@
 
 #define MSR_Parasitemia_Bins_DESC_TEXT "Parasitemia Bins (in infected red blood cells per microliter of blood) to aggregate within and report.  A value greater than or equal to zero in the first bin indicates that the uninfected people should be added to this bin.  The values must be in ascending order."
 #define MSR_Infectiousness_Bins_DESC_TEXT  "Infectiousness Bins to aggregate within and report"
+#define MSR_Include_DataByTimeAndPfPRBinsAndAgeBins_DESC_TEXT "When set to true, the 'DataByTimeAndPfPRBinsAndAgeBins' element is included in the report.  Default is true.  You can save disk space by setting this to false."
+#define MSR_Include_DataByTimeAndInfectiousnessBinsAndPfPRBinsAndAgeBins_DESC_TEXT "When set to true, the 'DataByTimeAndInfectiousnessBinsAndPfPRBinsAndAgeBins' element is included in the report.  Default is true.  You can save disk space by setting this to false."
+#define MSR_Add_True_Density_Vs_Threshold_DESC_TEXT "If set to true, four new channels will be added to the report that use true density instead of measured.  These additional channels are: 'PfPR_2to10-True', 'PfPR by Age Bin-True', 'Pf Gametocyte Prevalence by Age Bin-True', and 'Mean Log Parasite Density by Age Bin-True'.  The true densities will be compared to thresholds: Detection_Threshold_True_Parasite_Density and Detection_Threshold_True_Gametocyte_Density."
+#define MSR_Detection_Threshold_True_Gametocyte_Density_DESC_TEXT "Used when 'Add_True_Density_Vs_Threshold' is true.  The true gametocyte density is compared against this threshold.  It impacts the 'Pf Gametocyte Prevalence by Age Bin-True' channel."
+#define MSR_Detection_Threshold_True_Parasite_Density_DESC_TEXT   "Used when 'Add_True_Density_Vs_Threshold' is true.  The true parasite density is compared against this threshold.  It impacts the 'PfPR_2to10-True', 'PfPR by Age Bin-True', and 'Mean Log Parasite Density by Age Bin-True' channels."
+#define MSR_Detection_Threshold_True_HRP2_DESC_TEXT "Used when 'Add_Prevalence_By_HRP2' is true.  If the true HRP2 value is greater than this threshold, the prevalence will be increased in the 'PfPR_2to10-HRP2' and the 'PfPR by Age Bin-HRP2' channels."
+#define MSR_Add_Prevalence_By_HRP2_DESC_TEXT "If true, the 'PfPR_2to10-HRP2' and the 'PfPR by Age Bin-HRP2' channels will be added.  These channels will use 'Detection_Threshold_True_HRP2' to determine if person's HRP2 level counts towards prevalence."
 
 #define SQL_Include_Health_Table_DESC_TEXT "A true value (1) includes the Health table which has data for each time step for the health of an individual."
 #define SQL_Include_Infection_Data_Table_DESC_TEXT "A true value (1) includes the InfectionData table which has data for each time step for each active infection."
@@ -100,4 +107,7 @@
 #define RVM_Must_Be_From_Node_DESC_TEXT "A list of node IDs. A vector must be travelling FROM one of these nodes to be recorded into the report. Empty list means vectors traveling from any/all nodes will be recorded."
 #define RVM_Must_Be_To_Node_DESC_TEXT "A list of node IDs. A vector must be travelling TO one of these nodes to be recorded into the report. Empty list means vectors traveling to any/all nodes will be recorded."
 #define RVM_Include_Genome_Data_DESC_TEXT "If set to true (1), adds a Genome column for migrating vectors. Vectors with no custom alleles will still have their sex alleles listed."
+
+
+
 
