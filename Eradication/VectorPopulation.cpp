@@ -303,8 +303,9 @@ namespace Kernel
             IVectorHabitat* p_habitat = p_habitat_orig->Clone();
 
             float max_larval_capacity = p_habitat->GetMaximumLarvalCapacity()
-                                      * params()->x_tempLarvalHabitat
-                                      * ivnc->GetLarvalHabitatMultiplier( p_habitat->GetVectorHabitatType(), m_species_params->name );
+                                        * params()->x_tempLarvalHabitat;
+                                      // removing call to LarvalHabitatMultiplier in demographics to make serialization_mask 16 (habitat replacement) work
+                                      // * ivnc->GetLarvalHabitatMultiplier( p_habitat->GetVectorHabitatType(), m_species_params->name );
             p_habitat->SetMaximumLarvalCapacity( max_larval_capacity );
 
             ivnc->AddHabitat( m_species_params->name, p_habitat );

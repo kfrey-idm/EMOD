@@ -126,7 +126,7 @@ void ProgDllVersion::updateVersionString()
     // ----------------------------------------------------------------------------------
     //sprintf( m_sVersion, "%Iu.%Iu.%Iu.%Iu", m_nMajor, m_nMinor, m_nRevision, m_nBuild );
 
-    sprintf( m_sVersion, "%Iu.%Iu", m_nMajor, m_nMinor );
+    sprintf( m_sVersion, "%Iu.%Iu.%Iu", m_nMajor, m_nMinor, uint64_t(1));
 }
 
 std::string ProgDllVersion::getSerPopVersion() const
