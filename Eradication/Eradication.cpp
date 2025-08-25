@@ -132,23 +132,16 @@ int main(int argc, char* argv[])
 #endif
 
     ProgDllVersion pv;
-    auto sims = getSimTypeList();
+
     std::stringstream output;
     output << "EMOD Disease Transmission Kernel " << pv.getVersion() << std::endl
-           << "Built on " << pv.getBuildDate() <<
-           " by " << pv.getBuilderName() <<
-           " from " << pv.getSccsBranch() <<
-           " checked in on " << pv.getSccsDate() << std::endl;
+           << "Built on " << pv.getBuildDate() 
+           << " by " <<      pv.getBuilderName() 
+           << " from " <<    pv.getSccsBranch() 
+           << " checked in on " << pv.getSccsDate() << std::endl;
     
-    std::string sim_types_str = "Supports sim_types: ";
-    for( auto sim_type: sims  )
-    {
-        sim_types_str += IdmString( sim_type ).split('_')[0];
-        sim_types_str += ", ";
-    }
-    sim_types_str.pop_back();
-    sim_types_str.pop_back();
-    output << sim_types_str << "." << std::endl;
+    output << "Supports Simulation_Type(s): " << getSupportedSimsString() << "." << std::endl;
+
 #ifdef ENABLE_LOG_VALID
     output << "TestSugar Enabled" << std::endl;
 #endif
@@ -438,6 +431,10 @@ bool ControllerInitWrapper( int argc, char *argv[], IdmMpi::MessageInterface* pM
         {
             LOG_ERR("Failed to initialize environment, exiting\n");
             return false;
+        }
+        else
+        {
+            LOG_INFO( "Environment initialized successfully.\n" );
         }
 
         if( is_getting_schema )
