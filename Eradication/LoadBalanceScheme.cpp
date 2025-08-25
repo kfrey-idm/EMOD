@@ -249,12 +249,12 @@ namespace Kernel
         IInitialLoadBalanceScheme* p_lbs = nullptr ;
         if( extension == "json" )
         {
-            LOG_INFO_F("Using Json Load Balance Scheme from file: %s.\n", rFilename);
+            LOG_INFO_F("Using Json Load Balance Scheme from file: %s.\n", rFilename.c_str());
             p_lbs = new JsonInitialLoadBalanceScheme();
         }
         else if( !rFilename.empty() && FileSystem::FileExists( rFilename ) )
         {
-            LOG_INFO_F("Using Legacy Load Balance Scheme from file: %s.\n", rFilename);
+            LOG_INFO_F("Using Legacy Load Balance Scheme from file: %s.\n", rFilename.c_str());
             p_lbs = new LegacyFileInitialLoadBalanceScheme();
         }
         else
