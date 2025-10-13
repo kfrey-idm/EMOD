@@ -102,8 +102,23 @@
 //                                    Removed "Age_Dependence" parameter from InputEIR intervention, Age_Dependent_Biting_Risk_Type parameter 
 //                                    from config will be used going forward to indicate whether age-dependent biting will be used
 //                               Fixed MalariaSummaryReport bug where HRP2 channels were not being reported correctly.
-
-
+// 2.28 - 10/14/2025 -  Malaria: Changed default behavior of some of the interventions when a new one is given out when there's alreay an existing 
+//                               intervention:
+//                                     Bednets - new bednet of any bednet class will replace any existing bednet. Individual will not be able to have multiple bednets. 
+//                                     HousingModifications - new housing modifications are combined with already existing housing modifications of the same class.
+//                                     Larivices - new larvices are combined with already existing larvicides.
+//                                     Ivermectin - new Ivermectin is combined with already existing Ivermectin.
+//                                     Other node-level vector interventions - new intervention replaces existing intervention of the same class unless they have different Intervention_Name parameters.
+//                               Added OutdoorNodeEmanator intervention and IndoorIndividualEmanator interventions.
+//                               Outdoor returning mortality:
+//                                     Added "outdoor returning mortality" (contributed to by OutdoorRestKill and OutdoorNodeEmanator) to indoor biting vectors as well.
+//                                         Vectors that have successfully fed indoors are now subject to those interventions.                                 
+//                                     Fixed issue where "outdoor returning mortality" was applied after we calculated newly-infected-vector numbers, so you could get into a situation 
+//                                         where even if your "outdoor returning mortality" is 100%, your vectors population would still get newly-infected vectors as if some of the 
+//                                         vectors successfully survived feeding on an infected human.
+//                               Blood meal mortality:  
+//                                     Fixed issue where blood meal mortality and Ivermectin mortality were applied to vectors that fed on a sugar trap instead of a human
+//                                     Added blood meal mortality to animal feeding. Vectors that now feed on animals are affected by blood meal mortality parameter.
 
 #define    MAJOR_VERSION    2
 #define    MINOR_VERSION    28
