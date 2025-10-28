@@ -6,15 +6,16 @@ on:
     inputs:
       disease_type:
         description: 'Disease type in SCons build'
-        type: choice  # String
+        type: choice
         options:
-          - All
-          - Generic
-          - HIV
-          - Malaria
+          - 'All'
+          - 'Generic'
+          - 'HIV'
+          - 'Malaria'
 
 jobs:
   build_artifacts:
     name: Build and create artifacts
     uses: ./.github/workflows/build_archive.yml
-    with: ${{ inputs.disease_type }}
+    with:
+      disease_type: ${{ inputs.disease_type }}
