@@ -13,6 +13,12 @@
 
 using namespace Kernel;
 
+// Need lambda function because isspace is overloaded
+auto is_a_space = [](const unsigned char c) 
+{
+    return std::isspace(c);
+};
+
 SUITE( SerializedPopulationTest )
 {   
     TEST( TestHeader_Version5_ToString )
@@ -41,13 +47,13 @@ SUITE( SerializedPopulationTest )
                                 << "    {                                                                       "
                                 << "        \"emod_major_version\": 2,                                          "
                                 << "        \"emod_minor_version\" : 3,                                         "
-                                << "        \"emod_revision_number\" : 4,                                       "                              
+                                << "        \"emod_revision_number\" : 4,                                       "
                                 << "        \"ser_pop_major_version\" : 5,                                      "
                                 << "        \"ser_pop_minor_version\" : 6,                                      "
                                 << "        \"ser_pop_patch_version\" : 7,                                      "
-                                << "        \"emod_build_date\" : \"Wed Aug 31 19:28:49 2022\",               "   
+                                << "        \"emod_build_date\" : \"Wed Aug 31 19:28:49 2022\",                 "
                                 << "        \"emod_builder_name\" : \"me\",                                     "
-                                << "        \"emod_build_number\" : 123,                                        "
+                                << "        \"emod_build_number\" : 0,                                          "
                                 << "        \"emod_sccs_branch\" : \"serialization_improvements (1c3fc702f7)\", "
                                 << "        \"emod_sccs_date\" : \"2022-07-15 06:46:28 -0700\"                  "
                                 << "    },                                                                      "
@@ -57,14 +63,14 @@ SUITE( SerializedPopulationTest )
                                 << "}                                                                           ";
 
             std::string expected_json_header = json_header_temp.str();
-            expected_json_header.erase( remove_if( expected_json_header.begin(), expected_json_header.end(), isspace ), expected_json_header.end() );
+            expected_json_header.erase( std::remove_if( expected_json_header.begin(), expected_json_header.end(), is_a_space ), expected_json_header.end() );
 
             Kernel::RapidJsonObj rapjo;
             rapjo.Parse( json_header_temp.str().c_str() );
             header.emod_info = ProgDllVersion( rapjo.GetJsonObject( "emod_info" ) );
 
             std::string actual_header = header.ToString();
-            actual_header.erase( remove_if( actual_header.begin(), actual_header.end(), isspace ), actual_header.end() );
+            actual_header.erase( std::remove_if( actual_header.begin(), actual_header.end(), is_a_space ), actual_header.end() );
 
             CHECK_EQUAL( expected_json_header, actual_header );
         }
@@ -130,7 +136,7 @@ SUITE( SerializedPopulationTest )
             emod_info_json["emod_sccs_branch"] = json::String( "dummy_branch" );
             emod_info_json["emod_sccs_date"] = json::String( "dummy sccs" );
 
-            ProgDllVersion emod_info_ser_pop( emod_info_json );            
+            ProgDllVersion emod_info_ser_pop( emod_info_json );
             ProgDllVersion emod_info_this;
             json::QuickInterpreter em_info = emod_info_json;
 
@@ -378,7 +384,7 @@ SUITE( SerializedPopulationTest )
             emod_info_json["emod_builder_name"] = json::String( BUILDER_NAME );
             emod_info_json["emod_sccs_branch"] = json::String( SCCS_BRANCH );
             emod_info_json["emod_sccs_date"] = json::String( SCCS_DATE );
-            emod_info_json["emod_build_number"] = json::Uint64( BUILD_NUMBER );
+            emod_info_json["emod_build_number"] = json::Uint64( 0 );
 
             ProgDllVersion emod_info_from_json( emod_info_json );
 
@@ -400,7 +406,7 @@ SUITE( SerializedPopulationTest )
             json::Object emod_info_json;
             emod_info_json["emod_major_version"] = json::Uint64( 3 );
             emod_info_json["emod_minor_version"] = json::Uint64( 3 );
-            emod_info_json["emod_revision_number"] = json::Uint64( 3 );            
+            emod_info_json["emod_revision_number"] = json::Uint64( 3 );
 
             emod_info_json["ser_pop_major_version"] = json::Uint64( 2 );
             emod_info_json["ser_pop_minor_version"] = json::Uint64( 2 );
@@ -476,26 +482,26 @@ SUITE( SerializedPopulationTest )
                 << "{                                                                       "
                 << "    \"emod_major_version\": 1,                                          "
                 << "    \"emod_minor_version\" : 2,                                         "
-                << "    \"emod_revision_number\" : 3,                                       "               
+                << "    \"emod_revision_number\" : 3,                                       "
                 << "    \"ser_pop_major_version\" : 12345,                                  "
                 << "    \"ser_pop_minor_version\" : 23456,                                  "
                 << "    \"ser_pop_patch_version\" : 3456,                                   "
                 << "    \"emod_build_date\" : \"Wed Aug 31 19:28:49 2022\",                 "
                 << "    \"emod_builder_name\" : \"me\",                                     "
-                << "    \"emod_build_number\" : 123,                                        "
+                << "    \"emod_build_number\" : 0,                                          "
                 << "    \"emod_sccs_branch\" : \"serialization_improvements (1c3fc702f7)\", "
                 << "    \"emod_sccs_date\" : \"2022-07-15 06:46:28 -0700\"                  "
                 << "}                                                                       ";
 
             std::string emod_info_expected = emod_info_str.str();
-            emod_info_expected.erase( remove_if( emod_info_expected.begin(), emod_info_expected.end(), isspace ), emod_info_expected.end() );
+            emod_info_expected.erase( std::remove_if( emod_info_expected.begin(), emod_info_expected.end(), is_a_space ), emod_info_expected.end() );
 
             Kernel::RapidJsonObj rapjo;
             rapjo.Parse( emod_info_str.str().c_str() );
             ProgDllVersion emod_info( &rapjo );
 
             std::string emod_info_actual = emod_info.toString();
-            emod_info_actual.erase( remove_if( emod_info_actual.begin(), emod_info_actual.end(), isspace ), emod_info_actual.end() );
+            emod_info_actual.erase( std::remove_if( emod_info_actual.begin(), emod_info_actual.end(), is_a_space ), emod_info_actual.end() );
 
             CHECK_EQUAL( emod_info_expected, emod_info_actual );
 
@@ -598,7 +604,7 @@ SUITE( SerializedPopulationTest )
             << "    \"bytecount\" : 123456789,               " << std::endl
             << "    \"chunkcount\" : 3,                      " << std::endl
             << "    \"chunksizes\": [1, 2, 3]                " << std::endl
-            << "}                                            " << std::endl;        
+            << "}                                            " << std::endl;
         
         const char* filename = "Test_Header_throw_Exception_smaller_version_4.json";
         FILE* file = SerializedState::OpenFileForWriting( filename );
