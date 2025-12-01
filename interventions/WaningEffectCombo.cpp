@@ -20,22 +20,26 @@ namespace Kernel
 
     WaningEffectCollection::~WaningEffectCollection()
     {
+        for( auto p_effect : m_Collection )
+        {
+            delete p_effect;
+        }
+        m_Collection.clear();
     }
 
     json::QuickBuilder WaningEffectCollection::GetSchema()
     {
         WaningConfig waning_config;
 
-        std::string idm_type_schema = "idmType:WaningEffectCollection";
-        std::string object_schema_name = "<WaningEffect Value>";
-
         json::QuickBuilder schema( GetSchemaBase() );
         auto tn = JsonConfigurable::_typename_label();
         auto ts = JsonConfigurable::_typeschema_label();
-        schema[ tn ] = json::String( idm_type_schema );
+        schema[ tn ] = json::String( "idmType:WaningEffectCollection" );
 
         schema[ ts ] = json::Object();
-        schema[ ts ][ object_schema_name ] = waning_config.GetSchema().As<Object>();
+        schema[ ts ][ "default" ] = json::Array();
+        schema[ ts ][ "description" ] = json::String(WEC_Schema_Type_DESC_TEXT);
+        schema[ ts ][ "type" ] = json::String("Vector idmAbstractType:WaningEffect");
 
         return schema;
     }
@@ -112,6 +116,7 @@ namespace Kernel
         : JsonConfigurable( rOrig )
         , m_IsAdditive( rOrig.m_IsAdditive )
         , m_IsExpiringWhenAllExpire( rOrig.m_IsExpiringWhenAllExpire )
+        , m_EffectCollection()
     {
         for( int i = 0 ; i < rOrig.m_EffectCollection.Size() ; ++i )
         {
