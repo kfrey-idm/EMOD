@@ -9,6 +9,7 @@
 #include "SusceptibilityMalaria.h"
 #include "SimulationEventContext.h"
 
+
 SETUP_LOGGING( "ReportAntibodies" )
 
 namespace Kernel
@@ -93,7 +94,9 @@ namespace Kernel
                << ",IndividualID"
                << ",Gender"
                << ",AgeYears"
-               << ",IsInfected";
+               << ",IsInfected"
+               << ",PyrogenicThreshold"
+               << ",FeverKillingRate";
 
         for( int i = 0; i < SusceptibilityMalariaConfig::falciparumMSPVars; ++i )
         {
@@ -145,16 +148,19 @@ namespace Kernel
         // check that individual has any antibodies at all
         if(!is_infected)
         {
-            // if not infected, skip if we only want infected or if no antibodies present
+            // skip this person if we only want infected or if no antibodies present
+            // MSP1 antibodies are always generated first, so checking them is sufficient
             if(m_InfectedOnly || susceptibility_malaria->get_fraction_of_variants_with_antibodies( MalariaAntibodyType::MSP1 ) == 0.0f) return;
         }
 
         float current_time = p_nec->GetTime().time;
-        float dt = 1.0; // hm, maybe we shouldn't assume
+        float dt = 1.0; // malaria simulation dt=1
         uint32_t node_id = p_nec->GetExternalId();
         uint32_t ind_id = individual->GetSuid().data;
         const char* gender = ( individual->GetGender() == Gender::FEMALE ) ? "F" : "M";
         float age_years = individual->GetAge() / DAYSPERYEAR;
+        float pyrogenic_threshold = susceptibility_malaria->get_pyrogenic_threshold();
+        float fever_killing_rate  = susceptibility_malaria->get_fever_killing_rate();
 
         GetOutputStream()
             << current_time
@@ -162,36 +168,36 @@ namespace Kernel
             << "," << ind_id
             << "," << gender
             << "," << age_years
-            << "," << is_infected;
+            << "," << is_infected
+            << "," << pyrogenic_threshold
+            << "," << fever_killing_rate;
 
+        std::vector<MalariaAntibody> r_antibodies; // comes back sorted by variant value
+        // log MSP1 antibodies
+        susceptibility_malaria->GetAntibodiesForReporting( r_antibodies, current_time, dt, MalariaAntibodyType::MSP1 );
+        LogAntibodyData( r_antibodies, SusceptibilityMalariaConfig::falciparumMSPVars );
 
-        for(int t = 0; t < 2; ++t) // do MSP1 first, then PfEMP1
-        {
-            MalariaAntibodyType::Enum antibody_type = ( t == 0 ) ? MalariaAntibodyType::MSP1 : MalariaAntibodyType::PfEMP1_major;
-            int num_variants = ( t == 0 ) ? SusceptibilityMalariaConfig::falciparumMSPVars : SusceptibilityMalariaConfig::falciparumPfEMP1Vars;
-
-            std::vector<MalariaAntibody>& r_antibodies = susceptibility_malaria->GetAntibodiesForReporting( current_time, dt, antibody_type );
-            for(int i = 0; i < num_variants; ++i)
-            {
-                if (!r_antibodies.empty() && r_antibodies[0].GetAntibodyVariant() == i) 
-                {
-                    if(m_IsCapacityData)
-                        GetOutputStream() << "," << r_antibodies[0].GetAntibodyCapacity();
-                    else
-                        GetOutputStream() << "," << r_antibodies[0].GetAntibodyConcentration();
-                    // remove matched antibody to speed up next search
-                    r_antibodies.erase( r_antibodies.begin() );
-                    continue;
-                }
-                else // antibody not found for this variant
-                {
-                    GetOutputStream() << ",";
-                    break;
-                }
-            }
-        }
+        // log PfEMP1_major antibodies
+        susceptibility_malaria->GetAntibodiesForReporting( r_antibodies, current_time, dt, MalariaAntibodyType::PfEMP1_major );
+        LogAntibodyData( r_antibodies, SusceptibilityMalariaConfig::falciparumPfEMP1Vars );
 
         GetOutputStream() << endl;
     }
 
+    void ReportAntibodies::LogAntibodyData( const std::vector<MalariaAntibody>& r_antibodies, int num_variants )
+    {
+        int antibody_index = 0; // works because r_antibodies is sorted by variant value
+        for(int i = 0; i < num_variants; ++i) 
+        {
+            GetOutputStream() << ",";
+            if(antibody_index < r_antibodies.size() && r_antibodies[antibody_index].GetAntibodyVariant() == i)
+            {
+                if(m_IsCapacityData)
+                    GetOutputStream() << r_antibodies[antibody_index].GetAntibodyCapacity();
+                else
+                    GetOutputStream() << r_antibodies[antibody_index].GetAntibodyConcentration();
+                antibody_index++;
+            }
+        }
+    }
 }
