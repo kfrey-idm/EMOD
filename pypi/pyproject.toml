@@ -6,13 +6,14 @@ build-backend = "setuptools.build_meta"
 name = "emod-PACKAGE_TYPE"
 dynamic = ["version"]
 description = "PyPI distribution of EMOD for the PACKAGE_TYPE sim type"
-license = "MIT"
-authors = [
-]
 readme = "README.md"
 requires-python = ">=3.10"
+authors = [
+]
+keywords = ["modeling", "IDM"]
 dependencies = [
 ]
+license = "MIT"
 classifiers = [
     "Operating System :: POSIX :: Linux",
     "Programming Language :: C++",
@@ -28,12 +29,14 @@ docs = [
     "mkdocs-glightbox",
     "mkdocs-table-reader-plugin",
 ]
-tests = [
+lint = [
+]
+test = [
 ]
 
 [project.urls]
-Documentation = "https://emod.idmod.org/EMOD/"
 Repository = "https://github.com/EMOD-Hub/EMOD"
+Documentation = "https://emod.idmod.org/EMOD/"
 Issues = "https://github.com/EMOD-Hub/issues-and-discussions/issues"
 
 [tool.setuptools.package-data]

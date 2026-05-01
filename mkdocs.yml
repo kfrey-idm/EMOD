@@ -12,8 +12,8 @@ theme:
   logo: images/EMOD_logo.png
   favicon: images/favicon.ico
   features:
-    # - navigation.footer
     - content.code.copy
+    # - navigation.footer
   palette:
     - scheme: default
       toggle:
@@ -62,6 +62,7 @@ markdown_extensions:
   - admonition:
   - attr_list:  # enables HTMl and CSS classes to inline elements
   - def_list:
+  - footnotes:
   - md_in_html:  # enables grids
   - pymdownx.arithmatex:  # Latex processing for math equations
       generic: true
@@ -100,8 +101,8 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/EMOD-Hub/
-    - icon: fontawesome/regular/comments
-      link: https://github.com/orgs/EMOD-Hub/discussions
+    - icon: octicons/comment-discussion-24
+      link: https://github.com/EMOD-Hub/issues-and-discussions
     - icon: octicons/globe-24
       link: https://idmod.org
     - icon: simple/youtube
