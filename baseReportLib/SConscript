@@ -13,7 +13,7 @@ reportSrcFiles = [
     "ChannelDataMap.cpp",
     "ReportFilter.cpp",
     "ReportFilterRelationship.cpp",
-    "ReportUtilities.cpp"
+    "ReportUtilities.cpp",
 ]
 
 if ('Disease' in env) and ((env['Disease'] == 'Malaria') or (env['Disease'] == '')):

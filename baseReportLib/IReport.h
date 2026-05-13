@@ -3,7 +3,7 @@
 
 #include <string>
 #include <functional>
-#include "IdmApi.h"
+
 #include "Configure.h"
 #include "ExternalNodeId.h"
 
@@ -14,7 +14,7 @@ namespace Kernel
     struct IIndividualHuman;
     struct ISimulationEventContext;
 
-    class IDMAPI IReport : public JsonConfigurable
+    class IReport : public JsonConfigurable
     {
     public:
         virtual ~IReport() {} ;
@@ -52,7 +52,7 @@ namespace Kernel
     // This abstract class provides a default implementation to some of pure virtual methods
     // of IReport.  This allows other classes to be IReport's
     // without needing the equivalent of the code below.
-    class IDMAPI BaseReport : public IReport
+    class BaseReport : public IReport
     {
     public:
         virtual ~BaseReport(){};

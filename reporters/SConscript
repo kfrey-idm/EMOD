@@ -1,6 +1,4 @@
-# -*- mode: python; -*-
 # This Python script, SConscript, invoked by the SConscript in the upper directory,
-#
 # 1. builds customReport static library
 
 Import("env")
@@ -54,7 +52,8 @@ sti_cpp = [
     "ReportRelationshipMigrationTracking.cpp"
 ]
 
-hiv_cpp = []
+hiv_cpp = [
+]
 
 disease = "ALL"
 if 'Disease' in env and len(env['Disease']) > 0:
@@ -78,8 +77,5 @@ if( (disease == "ALL") or (disease == "STI") or (disease == "HIV") ):
 
 if( (disease == "ALL") or (disease == "HIV") ):
     reporters_cpp = reporters_cpp + hiv_cpp
-
-
-reporters_local = ['stdafx.h']
 
 reporters_lib = env.StaticLibrary('reporters', reporters_cpp)

@@ -1153,26 +1153,6 @@ namespace Kernel
 
         WithSelfFunc to_self_func = [this](int myRank) 
         { 
-#ifdef _DEBUG
-            //if( migratingIndividualQueues[ myRank ].size() > 0 )
-            //{
-            //    auto writer = make_shared<BinaryArchiveWriter>();
-            //    (*static_cast<IArchive*>(writer.get())) & migratingIndividualQueues[ myRank ];
-
-            //    for( auto& individual : migratingIndividualQueues[ myRank ] )
-            //        delete individual; // individual->Recycle();
-
-            //    migratingIndividualQueues[ myRank ].clear();
-
-            //    //if ( EnvPtr->Log->CheckLogLevel(Logger::VALIDATION, _module) ) {
-            //    //    _write_json( int(currentTime.time), EnvPtr->MPI.Rank, myRank, "self", static_cast<IArchive*>(writer.get())->GetBuffer(), static_cast<IArchive*>(writer.get())->GetBufferSize() );
-            //    //}
-
-            //    auto reader = make_shared<BinaryArchiveReader>( static_cast<IArchive*>(writer.get())->GetBuffer(), static_cast<IArchive*>(writer.get())->GetBufferSize() );
-            //    (*static_cast<IArchive*>(reader.get())) & migratingIndividualQueues[ myRank ];
-            //}
-#endif
-
             // Don't bother to serialize locally
             // for (auto individual : migratingIndividualQueues[destination_rank]) // Note the direction of iteration below!
             for (auto iterator = migratingIndividualQueues[myRank].rbegin(); iterator != migratingIndividualQueues[myRank].rend(); ++iterator)
@@ -1351,7 +1331,8 @@ namespace Kernel
             ar.labelElement( "rng" ) & sim.rng;
         }
 
-        if (sim.serializationFlags.test(SerializationFlags::Population)) {
+        if (sim.serializationFlags.test(SerializationFlags::Population))
+        {
             if (ar.IsReader()) {
                 // Read the nodes element in case it's a version 1 serialized file which includes
                 // the nodes in the nodes element.
