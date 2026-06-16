@@ -4,6 +4,7 @@
 #include <sys/stat.h> // stat()
 #include <algorithm> //std::replace()
 #include <fstream>
+#include <cstring>
 
 #include "Exceptions.h"
 #include "FileSystem.h"
@@ -43,13 +44,8 @@ bool FileSystem::RemoveDirectory( const std::string& rDir )
 
 bool FileSystem::FileExists( const std::string& rPath )
 {
-#ifdef WIN32
-    struct _stat64 s;
-    bool exists = _stat64( rPath.c_str(), &s ) == 0 ;
-#else
     struct stat s;
     bool exists = stat( rPath.c_str(), &s ) == 0 ;
-#endif
     exists = exists && (s.st_mode & S_IFREG) ; /*needed for linux, works on windows*/
     return exists ;
 }
@@ -176,7 +172,7 @@ void FileSystem::OpenFileForReading( std::ifstream& rInputStream, const char* pF
 {
     if( !FileSystem::FileExists( pFilename ) )
     {
-        throw Kernel::FileNotFoundException( __FILE__, __LINE__, __FUNCTION__, true, pFilename );
+        throw Kernel::FileNotFoundException( __FILE__, __LINE__, __FUNCTION__, pFilename );
     }
 
     std::ios_base::openmode mode = std::ios_base::in;
