@@ -5,6 +5,7 @@
 #include <set>
 #include <vector>
 #include <map>
+#include <climits>
 
 #include "Exceptions.h"
 #include "ISupports.h"
@@ -20,6 +21,9 @@ public:
 
     bool CheckElementByName(const std::string& elementName) const;
     const std::string& GetDataLocation() const { return data_location; }
+
+    bool IsObject() const { return (pElement->Type() == json::ElementType::OBJECT_ELEMENT); }
+    bool IsArray() const { return (pElement->Type() == json::ElementType::ARRAY_ELEMENT); }
 
     static Configuration* Load(std::string configFileName);
     static Configuration* Load(std::istream& rInputStream, const std::string& rDataLocation);
@@ -99,6 +103,12 @@ inline std::vector< float > GET_CONFIG_VECTOR_FLOAT(const json::QuickInterpreter
     return GET_CONFIG_VECTOR_FLOAT(parameter_source, name.c_str());
 }
 
+std::vector< bool > GET_CONFIG_VECTOR_BOOL(const json::QuickInterpreter* parameter_source, const char *name);
+inline std::vector< bool > GET_CONFIG_VECTOR_BOOL(const json::QuickInterpreter* parameter_source, const std::string& name)
+{
+    return GET_CONFIG_VECTOR_BOOL(parameter_source, name.c_str());
+}
+
 std::vector< int > GET_CONFIG_VECTOR_INT(const json::QuickInterpreter* parameter_source, const char *name);
 inline std::vector< int > GET_CONFIG_VECTOR_INT(const json::QuickInterpreter* parameter_source, const std::string& name)
 {
@@ -129,11 +139,7 @@ inline std::string GET_CONFIG_STRING(const json::QuickInterpreter* parameter_sou
     return GET_CONFIG_STRING(parameter_source, name.c_str());
 }
 
-#ifdef __GNUC__
-double GET_CONFIG_DOUBLE(const json::QuickInterpreter* parameter_source, const char *name, int min = -1*std::numeric_limits<int>::max());
-#else
 double GET_CONFIG_DOUBLE(const json::QuickInterpreter* parameter_source, const char *name, int min = -1*INT_MAX);
-#endif
 inline double GET_CONFIG_DOUBLE(const json::QuickInterpreter* parameter_source, const std::string& name)
 {
     return GET_CONFIG_DOUBLE(parameter_source, name.c_str());
@@ -158,16 +164,10 @@ inline bool GET_CONFIG_BOOLEAN(const json::QuickInterpreter* parameter_source, c
 #define GET_CONFIG_NUMBER(_cfg, _name)    (float)GET_CONFIG_DOUBLE(_cfg, _name)
 
 
-//////////////////////////////////////////////////////////////////////////
-// Declarations for Configurable object functionality
-
 namespace Kernel
 {
     using namespace std;
     using namespace json;
-
-    //////////////////////////////////////////////////////////////////////
-    // Configuration Mechanism
 
     struct IConfigurable : ISupports
     {
