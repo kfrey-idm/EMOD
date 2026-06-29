@@ -11,7 +11,6 @@
 #include "Log.h"
 #include "Configuration.h"
 #include "Configure.h"
-#include "ConfigurationImpl.h"
 #include "CampaignEvent.h"
 #include "EventCoordinator.h"
 #include "FactorySupport.h"
@@ -29,7 +28,7 @@ namespace Kernel
     template CampaignEventFactory* ObjectFactory<CampaignEvent, CampaignEventFactory>::getInstance();
 
     CampaignEventFactory::CampaignEventFactory()
-        : ObjectFactory<CampaignEvent, CampaignEventFactory>( false ) // do not queryForReturnInterface
+        : ObjectFactory<CampaignEvent, CampaignEventFactory>()
     {
     }
 
@@ -75,8 +74,8 @@ namespace Kernel
     // CampaignEvent
 
     IMPLEMENT_FACTORY_REGISTERED(CampaignEvent)
-
-    IMPL_QUERY_INTERFACE1(CampaignEvent, IConfigurable)
+    BEGIN_QUERY_INTERFACE_BODY(CampaignEvent)
+    END_QUERY_INTERFACE_BODY(CampaignEvent)
 
     CampaignEvent::CampaignEvent()
         : start_day(0.0f)
