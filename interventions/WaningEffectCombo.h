@@ -22,7 +22,6 @@ namespace Kernel
         virtual ~WaningEffectCollection();
 
         // IComplexJsonConfigurable methods
-        virtual bool  HasValidDefault() const override { return true; }
         virtual json::QuickBuilder GetSchema() override;
         virtual void ConfigureFromJsonAndKey( const Configuration* inputJson, const std::string& key ) override;
 
@@ -39,7 +38,7 @@ namespace Kernel
 
     class WaningEffectCombo : public JsonConfigurable, public IWaningEffect, public IWaningEffectCount
     {
-        DECLARE_FACTORY_REGISTERED_EXPORT( WaningEffectFactory, WaningEffectCombo, IWaningEffect )
+        DECLARE_FACTORY_REGISTERED( WaningEffectFactory, WaningEffectCombo, IWaningEffect )
 
     public:
         IMPLEMENT_NO_REFERENCE_COUNTING()
@@ -53,7 +52,6 @@ namespace Kernel
         virtual bool Configure( const Configuration *config ) override;
 
         // IWaningEffect methods
-        virtual IWaningEffect* Clone() override;
         virtual void  Update( float dt ) override;
         virtual float Current() const override;
         virtual bool  Expired() const override;
