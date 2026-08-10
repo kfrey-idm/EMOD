@@ -146,9 +146,13 @@
 //                       Removed some Boost dependencies, aligned Configuration methods with EMOD-Generic.
 //                       QueryInterface removal trial, Node alignment with Generic.
 //                       Updated legal statements, copyright year, README, and license files.
+// 2.37 - 8/10/2026  -  Bug-fixes and aging-related simplifications.
+//                        - Susceptibility no longer own a separate (potentially different) copy of an agent's age
+//                        - Aging only occurs when vital dynamics is enabled
+//                        - Eliminates null values from schema
 
 #define    MAJOR_VERSION    2
-#define    MINOR_VERSION    36
+#define    MINOR_VERSION    37
 
 #ifndef REVISION_NUMBER
 #define    REVISION_NUMBER  $REVISION$
